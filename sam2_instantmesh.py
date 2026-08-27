@@ -2,6 +2,7 @@ import torch
 import numpy as np
 import rembg
 import os
+import gc
 import torchvision
 import trimesh
 
@@ -83,6 +84,7 @@ def running_sam_box(color, box=None,checkpoint="./sam2/checkpoints/sam2.1_hiera_
         mask = masks[0].astype(np.bool_)
 
     del sam_predictor
+    gc.collect()
     torch.cuda.empty_cache()  # Clear the GPU memory
     return mask
 
@@ -155,6 +157,7 @@ def diffusion_image_generation(debug_dir, debug_input_dir, name=None,input_image
     images = torch.from_numpy(images).permute(2, 0, 1).contiguous().float()  # (3, 960, 640)
     images = rearrange(images, 'c (n h) (m w) -> (n m) c h w', n=3, m=2)  # (6, 3, 320, 320)
     del multiview_diffusion_model
+    gc.collect()
     torch.cuda.empty_cache()
     return images
 
@@ -206,4 +209,5 @@ def instant_mesh_process(images, debug_dir, name=None):
         # except:
         #     pass
     del instant_mesh
+    gc.collect()
     torch.cuda.empty_cache()  # Clear the GPU memory

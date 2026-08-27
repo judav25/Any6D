@@ -16,8 +16,6 @@ from pytorch_lightning import seed_everything
 
 from sam2_instantmesh import *
 
-glctx = dr.RasterizeCudaContext()
-
 if __name__=='__main__':
 
     seed_everything(0)
